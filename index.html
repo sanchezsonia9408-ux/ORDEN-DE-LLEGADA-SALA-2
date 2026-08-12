@@ -150,9 +150,17 @@
 
   async function cargarLlegadas() {
 
-    const { data, error } = await supabaseClient
+    const hoy = new Date();
+const año = hoy.getFullYear();
+const mes = String(hoy.getMonth() + 1).padStart(2, "0");
+const dia = String(hoy.getDate()).padStart(2, "0");
+const fechaHoy = `${año}-${mes}-${dia}`;
+
+const { data, error } = await supabaseClient
   .from("LLEGADAS")
   .select("*")
+  .gte("Hora_llegada", `${fechaHoy}T00:00:00`)
+  .lt("Hora_llegada", `${fechaHoy}T23:59:59.999`)
   .order("Hora_llegada", { ascending: true });
 
     if (error) {
