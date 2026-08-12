@@ -150,10 +150,16 @@
 
   async function cargarLlegadas() {
 
-    const { data, error } = await supabaseClient
-      .from("LLEGADAS")
-      .select("*")
-      .order("Hora_llegada", { ascending: true });
+    const hoy = new Date();
+const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1);
+
+const { data, error } = await supabase
+  .from("LLEGADAS")
+  .select("*")
+  .gte("Hora_llegada", inicio.toISOString())
+  .lt("Hora_llegada", fin.toISOString())
+  .order("Hora_llegada", { ascending: true });
 
     if (error) {
       console.error(error);
