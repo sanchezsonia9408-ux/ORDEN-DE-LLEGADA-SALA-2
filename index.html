@@ -150,7 +150,7 @@
 
   async function cargarLlegadas() {
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
   .from("LLEGADAS")
   .select("*")
   .order("Hora_llegada", { ascending: true });
