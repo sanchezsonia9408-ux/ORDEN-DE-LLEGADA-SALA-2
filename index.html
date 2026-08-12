@@ -5,51 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orden de Llegada</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <style>
     body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
       background: #f4f7fb;
-      color: #1f2937;
+      margin: 0;
+      padding: 30px 15px;
+      color: #222;
     }
 
     .contenedor {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 30px 20px;
-    }
-
-    .encabezado {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 25px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
     }
 
     h1 {
-      margin: 0;
-      color: #174ea6;
-      font-size: 30px;
-    }
-
-    .subtitulo {
-      margin-top: 8px;
-      color: #6b7280;
-      font-size: 15px;
-    }
-
-    .formulario {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
+      text-align: center;
+      color: #145da0;
+      margin-bottom: 30px;
     }
 
     label {
@@ -60,205 +39,253 @@
 
     input {
       width: 100%;
+      box-sizing: border-box;
       padding: 14px;
       font-size: 17px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
       margin-bottom: 15px;
     }
 
     button {
       width: 100%;
       padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background: #174ea6;
+      background: #145da0;
       color: white;
+      border: none;
+      border-radius: 8px;
       font-size: 17px;
-      font-weight: bold;
       cursor: pointer;
     }
 
     button:hover {
-      background: #123d80;
+      background: #0d477c;
     }
 
-    .tabla-contenedor {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    .mensaje {
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 25px;
     }
 
     th {
-      background: #174ea6;
+      background: #145da0;
       color: white;
-      padding: 15px;
-      text-align: left;
+      padding: 12px;
     }
 
     td {
-      padding: 15px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 16px;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .numero {
-      font-weight: bold;
-      color: #174ea6;
-      width: 80px;
-    }
-
-    .vacio {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
       text-align: center;
-      padding: 30px;
-      color: #6b7280;
     }
 
-    @media (max-width: 600px) {
-      .contenedor {
-        padding: 15px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      th, td {
-        padding: 12px 8px;
-        font-size: 14px;
-      }
+    tr:nth-child(even) {
+      background: #f5f8fc;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="contenedor">
+<div class="contenedor">
 
-    <div class="encabezado">
-      <h1>ORDEN DE LLEGADA</h1>
-      <div class="subtitulo">Registro de pacientes</div>
-    </div>
+  <h1>ORDEN DE LLEGADA</h1>
 
-    <div class="formulario">
+  <label for="nombre">Nombre completo del paciente</label>
 
-      <label for="nombre">Nombre completo</label>
+  <input
+    type="text"
+    id="nombre"
+    placeholder="Escriba el nombre completo"
+    autocomplete="off"
+  >
 
-      <input
-        type="text"
-        id="nombre"
-        placeholder="Escriba el nombre completo"
-        autocomplete="off"
-      >
+  <button onclick="registrarLlegada()">
+    REGISTRAR LLEGADA
+  </button>
 
-      <button onclick="registrarPaciente()">
-        REGISTRAR LLEGADA
-      </button>
+  <div id="mensaje" class="mensaje"></div>
 
-    </div>
+  <table>
+    <thead>
+      <tr>
+        <th>N.º</th>
+        <th>NOMBRE COMPLETO</th>
+        <th>HORA DE LLEGADA</th>
+      </tr>
+    </thead>
 
-    <div class="tabla-contenedor">
+    <tbody id="lista">
+    </tbody>
+  </table>
 
-      <table>
-        <thead>
-          <tr>
-            <th>N.º</th>
-            <th>NOMBRE COMPLETO</th>
-            <th>HORA DE LLEGADA</th>
-          </tr>
-        </thead>
+</div>
 
-        <tbody id="listaPacientes">
-          <tr>
-            <td colspan="3" class="vacio">
-              No hay pacientes registrados.
-            </td>
-          </tr>
-        </tbody>
+<script>
 
-      </table>
+  // ==========================================
+  // CONEXIÓN CON SUPABASE
+  // ==========================================
 
-    </div>
+  const SUPABASE_URL = "https://ilwabslwlgdajfeansfb.supabase.co";
 
-  </div>
+  const SUPABASE_KEY = "sb_publishable_3P599xF4oPEx_HLobyfZgA_Z6WSSk6l";
 
-  <script>
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-    let pacientes = [];
 
-    function registrarPaciente() {
+  // ==========================================
+  // MOSTRAR LAS LLEGADAS
+  // ==========================================
 
-      const campo = document.getElementById("nombre");
-      const nombre = campo.value.trim();
+  async function cargarLlegadas() {
 
-      if (nombre === "") {
-        alert("Por favor, escriba el nombre completo.");
-        campo.focus();
-        return;
-      }
+    const { data, error } = await supabaseClient
+      .from("LLEGADAS")
+      .select("*")
+      .order("hora_llegada", { ascending: true });
 
-      const ahora = new Date();
+    if (error) {
+      console.error(error);
+      document.getElementById("mensaje").textContent =
+        "No se pudo cargar la lista.";
+      return;
+    }
 
-      const hora = ahora.toLocaleTimeString("es-ES", {
+    mostrarLlegadas(data);
+  }
+
+
+  function mostrarLlegadas(llegadas) {
+
+    const lista = document.getElementById("lista");
+
+    lista.innerHTML = "";
+
+    llegadas.forEach((paciente, indice) => {
+
+      const fila = document.createElement("tr");
+
+      const hora = new Date(paciente.hora_llegada);
+
+      const horaFormateada = hora.toLocaleTimeString("es-AR", {
         hour: "2-digit",
         minute: "2-digit"
       });
 
-      pacientes.push({
-        nombre: nombre,
-        hora: hora
-      });
+      fila.innerHTML = `
+        <td>${indice + 1}</td>
+        <td>${escapeHTML(paciente.nombre_completo)}</td>
+        <td>${horaFormateada}</td>
+      `;
 
-      campo.value = "";
+      lista.appendChild(fila);
+    });
+  }
 
-      mostrarPacientes();
 
-      campo.focus();
+  // ==========================================
+  // REGISTRAR PACIENTE
+  // ==========================================
+
+  async function registrarLlegada() {
+
+    const campo = document.getElementById("nombre");
+    const mensaje = document.getElementById("mensaje");
+
+    const nombre = campo.value.trim();
+
+    if (!nombre) {
+      mensaje.textContent = "Escriba el nombre completo.";
+      mensaje.style.color = "red";
+      return;
     }
 
-    function mostrarPacientes() {
+    mensaje.textContent = "Registrando...";
+    mensaje.style.color = "#145da0";
 
-      const lista = document.getElementById("listaPacientes");
+    const { error } = await supabaseClient
+      .from("LLEGADAS")
+      .insert([
+        {
+          nombre_completo: nombre,
+          hora_llegada: new Date().toISOString()
+        }
+      ]);
 
-      if (pacientes.length === 0) {
-        lista.innerHTML = `
-          <tr>
-            <td colspan="3" class="vacio">
-              No hay pacientes registrados.
-            </td>
-          </tr>
-        `;
-        return;
+    if (error) {
+
+      console.error(error);
+
+      mensaje.textContent =
+        "No se pudo registrar. Revise la conexión.";
+
+      mensaje.style.color = "red";
+
+      return;
+    }
+
+    campo.value = "";
+
+    mensaje.textContent = "Llegada registrada correctamente.";
+    mensaje.style.color = "green";
+
+    await cargarLlegadas();
+
+    setTimeout(() => {
+      mensaje.textContent = "";
+    }, 3000);
+  }
+
+
+  // ==========================================
+  // ACTUALIZAR AUTOMÁTICAMENTE
+  // ==========================================
+
+  supabaseClient
+    .channel("llegadas-tiempo-real")
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "LLEGADAS"
+      },
+      () => {
+        cargarLlegadas();
       }
+    )
+    .subscribe();
 
-      lista.innerHTML = "";
 
-      pacientes.forEach((paciente, indice) => {
+  // ==========================================
+  // SEGURIDAD PARA MOSTRAR NOMBRES
+  // ==========================================
 
-        const fila = document.createElement("tr");
+  function escapeHTML(text) {
 
-        fila.innerHTML = `
-          <td class="numero">${indice + 1}</td>
-          <td>${paciente.nombre}</td>
-          <td>${paciente.hora}</td>
-        `;
+    const div = document.createElement("div");
 
-        lista.appendChild(fila);
+    div.textContent = text;
 
-      });
-    }
+    return div.innerHTML;
+  }
 
-  </script>
+
+  // Cargar la lista al abrir la página
+  cargarLlegadas();
+
+</script>
 
 </body>
 </html>
