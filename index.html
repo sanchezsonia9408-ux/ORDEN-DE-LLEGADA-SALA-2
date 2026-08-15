@@ -109,6 +109,35 @@
   <img src="images/logo.png.jpeg" alt="HEMODALUD SALA 2" class="logo">
 
   <h1>ORDEN DE LLEGADA</h1>
+  <div id="loginBox" style="margin-bottom: 20px;">
+  <button onclick="mostrarLogin()">
+    🔐 ACCESO PARA REGISTRAR
+  </button>
+</div>
+
+<div id="formLogin" style="display: none; margin-bottom: 20px;">
+
+  <input
+    type="email"
+    id="emailLogin"
+    placeholder="Correo"
+    autocomplete="username"
+  >
+
+  <input
+    type="password"
+    id="passwordLogin"
+    placeholder="Contraseña"
+    autocomplete="current-password"
+  >
+
+  <button onclick="iniciarSesion()">
+    INICIAR SESIÓN
+  </button>
+
+  <div id="loginMensaje" class="mensaje"></div>
+
+</div>
 
   <label for="nombre">Nombre completo del paciente</label>
 
@@ -217,10 +246,64 @@ const { data, error } = await supabaseClient
   // ==========================================
   // REGISTRAR PACIENTE
   // ==========================================
+function mostrarLogin() {
+  const formulario = document.getElementById("formLogin");
 
+  if (formulario.style.display === "none") {
+    formulario.style.display = "block";
+  } else {
+    formulario.style.display = "none";
+  }
+}
+
+
+async function iniciarSesion() {
+
+  const email = document.getElementById("emailLogin").value.trim();
+  const password = document.getElementById("passwordLogin").value;
+  const mensaje = document.getElementById("loginMensaje");
+
+  if (!email || !password) {
+    mensaje.textContent = "Ingrese correo y contraseña.";
+    mensaje.style.color = "red";
+    return;
+  }
+
+  mensaje.textContent = "Verificando...";
+  mensaje.style.color = "#145da0";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    console.error(error);
+    mensaje.textContent = "Correo o contraseña incorrectos.";
+    mensaje.style.color = "red";
+    return;
+  }
+
+  mensaje.textContent = "Acceso autorizado correctamente.";
+  mensaje.style.color = "green";
+
+  document.getElementById("emailLogin").value = "";
+  document.getElementById("passwordLogin").value = "";
+
+  document.getElementById("formLogin").style.display = "none";
+
+  alert("Ahora puede registrar llegadas.");
+}
   async function registrarLlegada() {
 
-    const campo = document.getElementById("nombre");
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    alert("Debe iniciar sesión para registrar una llegada.");
+    return;
+  }
+
+  const campo = document.getElementById("nombre");
     const mensaje = document.getElementById("mensaje");
 
     const nombre = campo.value.trim();
