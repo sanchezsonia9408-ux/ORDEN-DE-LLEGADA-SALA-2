@@ -85,6 +85,7 @@
       border-radius: 15px;
       box-shadow: 0 3px 15px rgba(0,0,0,0.10);
       position: relative;
+      padding-bottom: 70px;
     }
 
 
@@ -122,6 +123,8 @@
     }
 
 
+    /* BOTONES NORMALES */
+
     button {
       width: 100%;
       padding: 14px;
@@ -136,6 +139,29 @@
 
     button:hover {
       background: #0d477c;
+    }
+
+
+    /* ==========================================
+       BOTONES PEQUEÑOS DE LA ESQUINA
+       ========================================== */
+
+    .botones-esquina {
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+
+    .botones-esquina button {
+      width: auto;
+      padding: 5px 8px;
+      font-size: 11px;
+      border-radius: 5px;
+      margin: 0;
     }
 
 
@@ -240,33 +266,13 @@
       class="logo"
     >
 
-<h1>ORDEN DE LLEGADA</h1>
+
+    <h1>ORDEN DE LLEGADA</h1>
 
 
-<!-- ==========================================
-     CERRAR SESIÓN
-     ========================================== -->
-
-<div style="margin-bottom: 20px;">
-
-  <button onclick="cerrarSesion()">
-    🚪 CERRAR SESIÓN
-  </button>
-
-</div>
-
-
-<!-- ==========================================
-     ACCESO PARA REGISTRAR
-     ========================================== -->
-
-<div id="loginBox" style="margin-bottom: 20px;">
-
-  <button onclick="mostrarLogin()">
-    🔐 ACCESO PARA REGISTRAR
-  </button>
-
-</div>
+    <!-- ==========================================
+         ACCESO PARA REGISTRAR
+         ========================================== -->
 
     <div
       id="formLogin"
@@ -353,6 +359,25 @@
     </table>
 
 
+
+    <!-- ==========================================
+         BOTONES PEQUEÑOS EN ESQUINA INFERIOR
+         ========================================== -->
+
+    <div class="botones-esquina">
+
+      <button onclick="mostrarLogin()">
+        🔐 ACCESO
+      </button>
+
+
+      <button onclick="cerrarSesion()">
+        🚪 SALIR
+      </button>
+
+    </div>
+
+
   </div>
 
 </div>
@@ -391,8 +416,10 @@
     const email =
       document.getElementById("emailAcceso").value.trim();
 
+
     const password =
       document.getElementById("passwordAcceso").value;
+
 
     const mensaje =
       document.getElementById("mensajeAcceso");
@@ -478,11 +505,15 @@
 
     const hoy = new Date();
 
-    const año = hoy.getFullYear();
+
+    const año =
+      hoy.getFullYear();
+
 
     const mes =
       String(hoy.getMonth() + 1)
       .padStart(2, "0");
+
 
     const dia =
       String(hoy.getDate())
@@ -551,7 +582,9 @@
 
 
         const hora =
-          new Date(paciente.Hora_llegada);
+          new Date(
+            paciente.Hora_llegada
+          );
 
 
         const horaFormateada =
@@ -595,18 +628,22 @@
   function mostrarLogin() {
 
     const formulario =
-      document.getElementById("formLogin");
+      document.getElementById(
+        "formLogin"
+      );
 
 
     if (
       formulario.style.display === "none"
     ) {
 
-      formulario.style.display = "block";
+      formulario.style.display =
+        "block";
 
     } else {
 
-      formulario.style.display = "none";
+      formulario.style.display =
+        "none";
 
     }
 
@@ -643,7 +680,8 @@
       mensaje.textContent =
         "Ingrese correo y contraseña.";
 
-      mensaje.style.color = "red";
+      mensaje.style.color =
+        "red";
 
       return;
 
@@ -674,7 +712,8 @@
       mensaje.textContent =
         "Correo o contraseña incorrectos.";
 
-      mensaje.style.color = "red";
+      mensaje.style.color =
+        "red";
 
       return;
 
@@ -700,7 +739,8 @@
 
     document.getElementById(
       "formLogin"
-    ).style.display = "none";
+    ).style.display =
+      "none";
 
 
     alert(
@@ -735,11 +775,15 @@
 
 
     const campo =
-      document.getElementById("nombre");
+      document.getElementById(
+        "nombre"
+      );
 
 
     const mensaje =
-      document.getElementById("mensaje");
+      document.getElementById(
+        "mensaje"
+      );
 
 
     const nombre =
@@ -772,7 +816,8 @@
         .insert([
 
           {
-            nombre_completo: nombre,
+            nombre_completo:
+              nombre,
 
             Hora_llegada:
               new Date().toISOString()
@@ -862,9 +907,14 @@
   function escapeHTML(text) {
 
     const div =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    div.textContent = text;
+
+    div.textContent =
+      text;
+
 
     return div.innerHTML;
 
@@ -873,40 +923,69 @@
 
 
   // ==========================================
-// CERRAR SESIÓN
-// ==========================================
+  // CERRAR SESIÓN
+  // ==========================================
 
-async function cerrarSesion() {
+  async function cerrarSesion() {
 
-  const confirmar = confirm(
-    "¿Está seguro que desea cerrar la sesión?"
-  );
+    const confirmar =
+      confirm(
+        "¿Está seguro que desea cerrar la sesión?"
+      );
 
-  if (!confirmar) {
-    return;
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    const { error } =
+      await supabaseClient.auth.signOut();
+
+
+    if (error) {
+
+      console.error(error);
+
+      alert(
+        "No se pudo cerrar la sesión."
+      );
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "pantallaLogin"
+    ).style.display =
+      "flex";
+
+
+    document.getElementById(
+      "paginaPrincipal"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "emailAcceso"
+    ).value = "";
+
+
+    document.getElementById(
+      "passwordAcceso"
+    ).value = "";
+
   }
 
-  const { error } = await supabaseClient.auth.signOut();
-
-  if (error) {
-    console.error(error);
-    alert("No se pudo cerrar la sesión.");
-    return;
-  }
-
-  document.getElementById("pantallaLogin").style.display = "flex";
-
-  document.getElementById("paginaPrincipal").style.display = "none";
-
-  document.getElementById("emailAcceso").value = "";
-  document.getElementById("passwordAcceso").value = "";
-
-}
 
 
-// ==========================================
-// MANTENER LA SESIÓN AL ACTUALIZAR
-// ==========================================
+  // ==========================================
+  // MANTENER LA SESIÓN AL ACTUALIZAR
+  // ==========================================
 
   async function verificarSesion() {
 
@@ -918,16 +997,16 @@ async function cerrarSesion() {
 
     if (session) {
 
-      // Ya inició sesión anteriormente
-
       document.getElementById(
         "pantallaLogin"
-      ).style.display = "none";
+      ).style.display =
+        "none";
 
 
       document.getElementById(
         "paginaPrincipal"
-      ).style.display = "block";
+      ).style.display =
+        "block";
 
 
       cargarLlegadas();
@@ -935,23 +1014,26 @@ async function cerrarSesion() {
 
     } else {
 
-      // No tiene sesión
-
       document.getElementById(
         "pantallaLogin"
-      ).style.display = "flex";
+      ).style.display =
+        "flex";
 
 
       document.getElementById(
         "paginaPrincipal"
-      ).style.display = "none";
+      ).style.display =
+        "none";
 
     }
 
   }
 
 
-  // Comprobar sesión al abrir o actualizar
+
+  // ==========================================
+  // COMPROBAR SESIÓN AL ABRIR
+  // ==========================================
 
   verificarSesion();
 
