@@ -35,6 +35,51 @@
       left: 20px;
     }
 
+    #pantallaLogin {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-contenedor {
+      width: 100%;
+      max-width: 380px;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .logo-login {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .login-contenedor h2 {
+      color: #145da0;
+      margin-bottom: 25px;
+    }
+
+    .login-contenedor input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      font-size: 16px;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #145da0;
+      margin-bottom: 30px;
+    }
+
     h1 {
       text-align: center;
       color: #145da0;
@@ -103,6 +148,40 @@
 </head>
 
 <body>
+
+<div id="pantallaLogin">
+
+  <div class="login-contenedor">
+
+    <img src="images/logo.png.jpeg" alt="HEMODALUD SALA 2" class="logo-login">
+
+    <h2>ACCESO AL SISTEMA</h2>
+
+    <input
+      type="email"
+      id="emailAcceso"
+      placeholder="Correo"
+      autocomplete="username"
+    >
+
+    <input
+      type="password"
+      id="passwordAcceso"
+      placeholder="Contraseña"
+      autocomplete="current-password"
+    >
+
+    <button onclick="accederPagina()">
+      🔐 INICIAR SESIÓN
+    </button>
+
+    <div id="mensajeAcceso" class="mensaje"></div>
+
+  </div>
+
+</div>
+
+<div id="paginaPrincipal" style="display: none;">
 
 <div class="contenedor">
 
@@ -184,11 +263,52 @@
     SUPABASE_KEY
   );
 
+ // ==========================================
+  // INICIAR SESIÓN
+  // ==========================================
+
+  async function accederPagina() {
+
+    const email = document.getElementById("emailAcceso").value.trim();
+    const password = document.getElementById("passwordAcceso").value;
+    const mensaje = document.getElementById("mensajeAcceso");
+
+    if (!email || !password) {
+      mensaje.textContent = "Ingrese correo y contraseña.";
+      mensaje.style.color = "red";
+      return;
+    }
+
+    mensaje.textContent = "Verificando...";
+    mensaje.style.color = "#145da0";
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      console.error(error);
+      mensaje.textContent = "Correo o contraseña incorrectos.";
+      mensaje.style.color = "red";
+      return;
+    }
+
+    // Ocultar pantalla de acceso
+    document.getElementById("pantallaLogin").style.display = "none";
+
+    // Mostrar página principal
+    document.getElementById("paginaPrincipal").style.display = "block";
+
+    // Cargar las llegadas
+    cargarLlegadas();
+  }
+
 
   // ==========================================
   // MOSTRAR LAS LLEGADAS
   // ==========================================
-
+ 
   async function cargarLlegadas() {
 
     const hoy = new Date();
