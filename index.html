@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Orden de Llegada</title>
+
   <link rel="icon" type="image/png" href="images/logo.png.jpeg">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
   <style>
+
     body {
       font-family: Arial, sans-serif;
       background: #f4f7fb;
@@ -17,23 +24,10 @@
       color: #222;
     }
 
-    .contenedor {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
-      position: relative;
-    }
 
-    .logo {
-      width: 80px;
-      height: auto;
-      position: absolute;
-      top: 20px;
-      left: 20px;
-    }
+    /* ==========================================
+       PANTALLA DE ACCESO
+       ========================================== */
 
     #pantallaLogin {
       min-height: 100vh;
@@ -41,6 +35,7 @@
       justify-content: center;
       align-items: center;
     }
+
 
     .login-contenedor {
       width: 100%;
@@ -53,16 +48,19 @@
       box-sizing: border-box;
     }
 
+
     .logo-login {
       width: 100px;
       height: auto;
       margin-bottom: 10px;
     }
 
+
     .login-contenedor h2 {
       color: #145da0;
       margin-bottom: 25px;
     }
+
 
     .login-contenedor input {
       width: 100%;
@@ -74,23 +72,44 @@
       margin-bottom: 15px;
     }
 
-    h1 {
-      text-align: center;
-      color: #145da0;
-      margin-bottom: 30px;
+
+    /* ==========================================
+       PÁGINA PRINCIPAL
+       ========================================== */
+
+    .contenedor {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
+      position: relative;
     }
+
+
+    .logo {
+      width: 80px;
+      height: auto;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
 
     h1 {
       text-align: center;
       color: #145da0;
       margin-bottom: 30px;
     }
+
 
     label {
       display: block;
       font-weight: bold;
       margin-bottom: 8px;
     }
+
 
     input {
       width: 100%;
@@ -101,6 +120,7 @@
       border-radius: 8px;
       margin-bottom: 15px;
     }
+
 
     button {
       width: 100%;
@@ -113,9 +133,11 @@
       cursor: pointer;
     }
 
+
     button:hover {
       background: #0d477c;
     }
+
 
     .mensaje {
       margin: 15px 0;
@@ -123,11 +145,13 @@
       font-weight: bold;
     }
 
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 25px;
     }
+
 
     th {
       background: #145da0;
@@ -135,27 +159,42 @@
       padding: 12px;
     }
 
+
     td {
       padding: 12px;
       border-bottom: 1px solid #ddd;
       text-align: center;
     }
 
+
     tr:nth-child(even) {
       background: #f5f8fc;
     }
+
   </style>
+
 </head>
 
+
 <body>
+
+
+<!-- ==========================================
+     PANTALLA DE ACCESO GENERAL
+     ========================================== -->
 
 <div id="pantallaLogin">
 
   <div class="login-contenedor">
 
-    <img src="images/logo.png.jpeg" alt="HEMODALUD SALA 2" class="logo-login">
+    <img
+      src="images/logo.png.jpeg"
+      alt="HEMODALUD SALA 2"
+      class="logo-login"
+    >
 
     <h2>ACCESO AL SISTEMA</h2>
+
 
     <input
       type="email"
@@ -164,6 +203,7 @@
       autocomplete="username"
     >
 
+
     <input
       type="password"
       id="passwordAcceso"
@@ -171,9 +211,11 @@
       autocomplete="current-password"
     >
 
+
     <button onclick="accederPagina()">
       🔐 INICIAR SESIÓN
     </button>
+
 
     <div id="mensajeAcceso" class="mensaje"></div>
 
@@ -181,270 +223,552 @@
 
 </div>
 
+
+
+<!-- ==========================================
+     PÁGINA PRINCIPAL
+     ========================================== -->
+
 <div id="paginaPrincipal" style="display: none;">
 
-<div class="contenedor">
+  <div class="contenedor">
 
-  <img src="images/logo.png.jpeg" alt="HEMODALUD SALA 2" class="logo">
 
-  <h1>ORDEN DE LLEGADA</h1>
-  <div id="loginBox" style="margin-bottom: 20px;">
-  <button onclick="mostrarLogin()">
-    🔐 ACCESO PARA REGISTRAR
-  </button>
+    <img
+      src="images/logo.png.jpeg"
+      alt="HEMODALUD SALA 2"
+      class="logo"
+    >
+
+
+    <h1>ORDEN DE LLEGADA</h1>
+
+
+    <!-- ==========================================
+         ACCESO PARA REGISTRAR
+         ========================================== -->
+
+    <div id="loginBox" style="margin-bottom: 20px;">
+
+      <button onclick="mostrarLogin()">
+        🔐 ACCESO PARA REGISTRAR
+      </button>
+
+    </div>
+
+
+    <div
+      id="formLogin"
+      style="display: none; margin-bottom: 20px;"
+    >
+
+      <input
+        type="email"
+        id="emailLogin"
+        placeholder="Correo"
+        autocomplete="username"
+      >
+
+
+      <input
+        type="password"
+        id="passwordLogin"
+        placeholder="Contraseña"
+        autocomplete="current-password"
+      >
+
+
+      <button onclick="iniciarSesion()">
+        INICIAR SESIÓN
+      </button>
+
+
+      <div id="loginMensaje" class="mensaje"></div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+         REGISTRO DE PACIENTE
+         ========================================== -->
+
+    <label for="nombre">
+      Nombre completo del paciente
+    </label>
+
+
+    <input
+      type="text"
+      id="nombre"
+      placeholder="Escriba el nombre completo"
+      autocomplete="off"
+    >
+
+
+    <button onclick="registrarLlegada()">
+      REGISTRAR LLEGADA
+    </button>
+
+
+    <div id="mensaje" class="mensaje"></div>
+
+
+
+    <!-- ==========================================
+         TABLA
+         ========================================== -->
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>N.º</th>
+
+          <th>NOMBRE COMPLETO</th>
+
+          <th>HORA DE LLEGADA</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="lista">
+      </tbody>
+
+    </table>
+
+
+  </div>
+
 </div>
 
-<div id="formLogin" style="display: none; margin-bottom: 20px;">
 
-  <input
-    type="email"
-    id="emailLogin"
-    placeholder="Correo"
-    autocomplete="username"
-  >
-
-  <input
-    type="password"
-    id="passwordLogin"
-    placeholder="Contraseña"
-    autocomplete="current-password"
-  >
-
-  <button onclick="iniciarSesion()">
-    INICIAR SESIÓN
-  </button>
-
-  <div id="loginMensaje" class="mensaje"></div>
-
-</div>
-
-  <label for="nombre">Nombre completo del paciente</label>
-
-  <input
-    type="text"
-    id="nombre"
-    placeholder="Escriba el nombre completo"
-    autocomplete="off"
-  >
-
-  <button onclick="registrarLlegada()">
-    REGISTRAR LLEGADA
-  </button>
-
-  <div id="mensaje" class="mensaje"></div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>N.º</th>
-        <th>NOMBRE COMPLETO</th>
-        <th>HORA DE LLEGADA</th>
-      </tr>
-    </thead>
-
-    <tbody id="lista">
-    </tbody>
-  </table>
-
-</div>
 
 <script>
+
 
   // ==========================================
   // CONEXIÓN CON SUPABASE
   // ==========================================
 
-  const SUPABASE_URL = "https://ilwabslwlgdajfeansfb.supabase.co";
+  const SUPABASE_URL =
+    "https://ilwabslwlgdajfeansfb.supabase.co";
 
-  const SUPABASE_KEY = "sb_publishable_3P599xF4oPEx_HLobyfZgA_Z6WSSk6l";
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+  const SUPABASE_KEY =
+    "sb_publishable_3P599xF4oPEx_HLobyfZgA_Z6WSSk6l";
 
- // ==========================================
-  // INICIAR SESIÓN
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+
+  // ==========================================
+  // ACCESO GENERAL A LA PÁGINA
   // ==========================================
 
   async function accederPagina() {
 
-    const email = document.getElementById("emailAcceso").value.trim();
-    const password = document.getElementById("passwordAcceso").value;
-    const mensaje = document.getElementById("mensajeAcceso");
+    const email =
+      document.getElementById("emailAcceso").value.trim();
+
+    const password =
+      document.getElementById("passwordAcceso").value;
+
+    const mensaje =
+      document.getElementById("mensajeAcceso");
+
 
     if (!email || !password) {
-      mensaje.textContent = "Ingrese correo y contraseña.";
+
+      mensaje.textContent =
+        "Ingrese correo y contraseña.";
+
       mensaje.style.color = "red";
+
       return;
     }
 
-    mensaje.textContent = "Verificando...";
+
+    mensaje.textContent =
+      "Verificando...";
+
     mensaje.style.color = "#145da0";
 
-    const { error } = await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
+      });
+
 
     if (error) {
+
       console.error(error);
-      mensaje.textContent = "Correo o contraseña incorrectos.";
+
+      mensaje.textContent =
+        "Correo o contraseña incorrectos.";
+
       mensaje.style.color = "red";
+
       return;
     }
 
-    // Ocultar pantalla de acceso
-    document.getElementById("pantallaLogin").style.display = "none";
 
-    // Mostrar página principal
-    document.getElementById("paginaPrincipal").style.display = "block";
+    mensaje.textContent =
+      "Acceso autorizado.";
 
-    // Cargar las llegadas
+    mensaje.style.color = "green";
+
+
+    document.getElementById(
+      "pantallaLogin"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "paginaPrincipal"
+    ).style.display = "block";
+
+
+    document.getElementById(
+      "emailAcceso"
+    ).value = "";
+
+
+    document.getElementById(
+      "passwordAcceso"
+    ).value = "";
+
+
     cargarLlegadas();
+
   }
+
 
 
   // ==========================================
   // MOSTRAR LAS LLEGADAS
   // ==========================================
- 
+
   async function cargarLlegadas() {
 
     const hoy = new Date();
-const año = hoy.getFullYear();
-const mes = String(hoy.getMonth() + 1).padStart(2, "0");
-const dia = String(hoy.getDate()).padStart(2, "0");
-const fechaHoy = `${año}-${mes}-${dia}`;
 
-const { data, error } = await supabaseClient
-  .from("LLEGADAS")
-  .select("*")
-  .gte("Hora_llegada", `${fechaHoy}T00:00:00`)
-  .lt("Hora_llegada", `${fechaHoy}T23:59:59.999`)
-  .order("Hora_llegada", { ascending: true });
+    const año = hoy.getFullYear();
+
+    const mes =
+      String(hoy.getMonth() + 1)
+      .padStart(2, "0");
+
+    const dia =
+      String(hoy.getDate())
+      .padStart(2, "0");
+
+
+    const fechaHoy =
+      `${año}-${mes}-${dia}`;
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("LLEGADAS")
+        .select("*")
+        .gte(
+          "Hora_llegada",
+          `${fechaHoy}T00:00:00`
+        )
+        .lt(
+          "Hora_llegada",
+          `${fechaHoy}T23:59:59.999`
+        )
+        .order(
+          "Hora_llegada",
+          { ascending: true }
+        );
+
 
     if (error) {
+
       console.error(error);
-      document.getElementById("mensaje").textContent =
+
+      document.getElementById(
+        "mensaje"
+      ).textContent =
         "No se pudo cargar la lista.";
+
       return;
     }
 
+
     mostrarLlegadas(data);
+
   }
 
+
+
+  // ==========================================
+  // MOSTRAR DATOS EN LA TABLA
+  // ==========================================
 
   function mostrarLlegadas(llegadas) {
 
-    const lista = document.getElementById("lista");
+    const lista =
+      document.getElementById("lista");
+
 
     lista.innerHTML = "";
 
-    llegadas.forEach((paciente, indice) => {
 
-      const fila = document.createElement("tr");
+    llegadas.forEach(
+      (paciente, indice) => {
 
-      const hora = new Date(paciente.Hora_llegada);
+        const fila =
+          document.createElement("tr");
 
-      const horaFormateada = hora.toLocaleTimeString("es-AR", {
-        hour: "2-digit",
-        minute: "2-digit"
+
+        const hora =
+          new Date(paciente.Hora_llegada);
+
+
+        const horaFormateada =
+          hora.toLocaleTimeString(
+            "es-AR",
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          );
+
+
+        fila.innerHTML = `
+
+          <td>${indice + 1}</td>
+
+          <td>
+            ${escapeHTML(
+              paciente.nombre_completo
+            )}
+          </td>
+
+          <td>${horaFormateada}</td>
+
+        `;
+
+
+        lista.appendChild(fila);
+
+      }
+    );
+
+  }
+
+
+
+  // ==========================================
+  // MOSTRAR / OCULTAR ACCESO PARA REGISTRAR
+  // ==========================================
+
+  function mostrarLogin() {
+
+    const formulario =
+      document.getElementById("formLogin");
+
+
+    if (
+      formulario.style.display === "none"
+    ) {
+
+      formulario.style.display = "block";
+
+    } else {
+
+      formulario.style.display = "none";
+
+    }
+
+  }
+
+
+
+  // ==========================================
+  // INICIAR SESIÓN PARA REGISTRAR
+  // ==========================================
+
+  async function iniciarSesion() {
+
+    const email =
+      document.getElementById(
+        "emailLogin"
+      ).value.trim();
+
+
+    const password =
+      document.getElementById(
+        "passwordLogin"
+      ).value;
+
+
+    const mensaje =
+      document.getElementById(
+        "loginMensaje"
+      );
+
+
+    if (!email || !password) {
+
+      mensaje.textContent =
+        "Ingrese correo y contraseña.";
+
+      mensaje.style.color = "red";
+
+      return;
+
+    }
+
+
+    mensaje.textContent =
+      "Verificando...";
+
+    mensaje.style.color =
+      "#145da0";
+
+
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: password
+
       });
 
-      fila.innerHTML = `
-        <td>${indice + 1}</td>
-        <td>${escapeHTML(paciente.nombre_completo)}</td>
-        <td>${horaFormateada}</td>
-      `;
 
-      lista.appendChild(fila);
-    });
+    if (error) {
+
+      console.error(error);
+
+      mensaje.textContent =
+        "Correo o contraseña incorrectos.";
+
+      mensaje.style.color = "red";
+
+      return;
+
+    }
+
+
+    mensaje.textContent =
+      "Acceso autorizado correctamente.";
+
+    mensaje.style.color =
+      "green";
+
+
+    document.getElementById(
+      "emailLogin"
+    ).value = "";
+
+
+    document.getElementById(
+      "passwordLogin"
+    ).value = "";
+
+
+    document.getElementById(
+      "formLogin"
+    ).style.display = "none";
+
+
+    alert(
+      "Ahora puede registrar llegadas."
+    );
+
   }
+
 
 
   // ==========================================
   // REGISTRAR PACIENTE
   // ==========================================
-function mostrarLogin() {
-  const formulario = document.getElementById("formLogin");
 
-  if (formulario.style.display === "none") {
-    formulario.style.display = "block";
-  } else {
-    formulario.style.display = "none";
-  }
-}
-
-
-async function iniciarSesion() {
-
-  const email = document.getElementById("emailLogin").value.trim();
-  const password = document.getElementById("passwordLogin").value;
-  const mensaje = document.getElementById("loginMensaje");
-
-  if (!email || !password) {
-    mensaje.textContent = "Ingrese correo y contraseña.";
-    mensaje.style.color = "red";
-    return;
-  }
-
-  mensaje.textContent = "Verificando...";
-  mensaje.style.color = "#145da0";
-
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
-
-  if (error) {
-    console.error(error);
-    mensaje.textContent = "Correo o contraseña incorrectos.";
-    mensaje.style.color = "red";
-    return;
-  }
-
-  mensaje.textContent = "Acceso autorizado correctamente.";
-  mensaje.style.color = "green";
-
-  document.getElementById("emailLogin").value = "";
-  document.getElementById("passwordLogin").value = "";
-
-  document.getElementById("formLogin").style.display = "none";
-
-  alert("Ahora puede registrar llegadas.");
-}
   async function registrarLlegada() {
 
-  const { data: { user } } = await supabaseClient.auth.getUser();
+    const {
+      data: { user }
+    } =
+      await supabaseClient.auth.getUser();
 
-  if (!user) {
-    alert("Debe iniciar sesión para registrar una llegada.");
-    return;
-  }
 
-  const campo = document.getElementById("nombre");
-    const mensaje = document.getElementById("mensaje");
+    if (!user) {
 
-    const nombre = campo.value.trim();
+      alert(
+        "Debe iniciar sesión para registrar una llegada."
+      );
 
-    if (!nombre) {
-      mensaje.textContent = "Escriba el nombre completo.";
-      mensaje.style.color = "red";
       return;
+
     }
 
-    mensaje.textContent = "Registrando...";
-    mensaje.style.color = "#145da0";
 
-    const { error } = await supabaseClient
-      .from("LLEGADAS")
-      .insert([
-        {
-          nombre_completo: nombre,
-          Hora_llegada: new Date().toISOString()
-        }
-      ]);
+    const campo =
+      document.getElementById("nombre");
+
+
+    const mensaje =
+      document.getElementById("mensaje");
+
+
+    const nombre =
+      campo.value.trim();
+
+
+    if (!nombre) {
+
+      mensaje.textContent =
+        "Escriba el nombre completo.";
+
+      mensaje.style.color =
+        "red";
+
+      return;
+
+    }
+
+
+    mensaje.textContent =
+      "Registrando...";
+
+    mensaje.style.color =
+      "#145da0";
+
+
+    const { error } =
+      await supabaseClient
+        .from("LLEGADAS")
+        .insert([
+
+          {
+            nombre_completo: nombre,
+
+            Hora_llegada:
+              new Date().toISOString()
+          }
+
+        ]);
+
 
     if (error) {
 
@@ -453,42 +777,71 @@ async function iniciarSesion() {
       mensaje.textContent =
         "No se pudo registrar. Revise la conexión.";
 
-      mensaje.style.color = "red";
+      mensaje.style.color =
+        "red";
 
       return;
+
     }
+
 
     campo.value = "";
 
-    mensaje.textContent = "Llegada registrada correctamente.";
-    mensaje.style.color = "green";
+
+    mensaje.textContent =
+      "Llegada registrada correctamente.";
+
+    mensaje.style.color =
+      "green";
+
 
     await cargarLlegadas();
 
+
     setTimeout(() => {
+
       mensaje.textContent = "";
+
     }, 3000);
+
   }
 
 
+
   // ==========================================
-  // ACTUALIZAR AUTOMÁTICAMENTE
+  // ACTUALIZACIÓN AUTOMÁTICA
   // ==========================================
 
   supabaseClient
-    .channel("llegadas-tiempo-real")
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "LLEGADAS"
-      },
-      () => {
-        cargarLlegadas();
-      }
+
+    .channel(
+      "llegadas-tiempo-real"
     )
+
+    .on(
+
+      "postgres_changes",
+
+      {
+
+        event: "*",
+
+        schema: "public",
+
+        table: "LLEGADAS"
+
+      },
+
+      () => {
+
+        cargarLlegadas();
+
+      }
+
+    )
+
     .subscribe();
+
 
 
   // ==========================================
@@ -497,18 +850,72 @@ async function iniciarSesion() {
 
   function escapeHTML(text) {
 
-    const div = document.createElement("div");
+    const div =
+      document.createElement("div");
 
     div.textContent = text;
 
     return div.innerHTML;
+
   }
 
 
-  // Cargar la lista al abrir la página
-  cargarLlegadas();
+
+  // ==========================================
+  // MANTENER LA SESIÓN AL ACTUALIZAR
+  // ==========================================
+
+  async function verificarSesion() {
+
+    const {
+      data: { session }
+    } =
+      await supabaseClient.auth.getSession();
+
+
+    if (session) {
+
+      // Ya inició sesión anteriormente
+
+      document.getElementById(
+        "pantallaLogin"
+      ).style.display = "none";
+
+
+      document.getElementById(
+        "paginaPrincipal"
+      ).style.display = "block";
+
+
+      cargarLlegadas();
+
+
+    } else {
+
+      // No tiene sesión
+
+      document.getElementById(
+        "pantallaLogin"
+      ).style.display = "flex";
+
+
+      document.getElementById(
+        "paginaPrincipal"
+      ).style.display = "none";
+
+    }
+
+  }
+
+
+  // Comprobar sesión al abrir o actualizar
+
+  verificarSesion();
+
 
 </script>
 
+
 </body>
+
 </html>
