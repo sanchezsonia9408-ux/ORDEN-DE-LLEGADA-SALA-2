@@ -240,22 +240,33 @@
       class="logo"
     >
 
+<h1>ORDEN DE LLEGADA</h1>
 
-    <h1>ORDEN DE LLEGADA</h1>
+
+<!-- ==========================================
+     CERRAR SESIÓN
+     ========================================== -->
+
+<div style="margin-bottom: 20px;">
+
+  <button onclick="cerrarSesion()">
+    🚪 CERRAR SESIÓN
+  </button>
+
+</div>
 
 
-    <!-- ==========================================
-         ACCESO PARA REGISTRAR
-         ========================================== -->
+<!-- ==========================================
+     ACCESO PARA REGISTRAR
+     ========================================== -->
 
-    <div id="loginBox" style="margin-bottom: 20px;">
+<div id="loginBox" style="margin-bottom: 20px;">
 
-      <button onclick="mostrarLogin()">
-        🔐 ACCESO PARA REGISTRAR
-      </button>
+  <button onclick="mostrarLogin()">
+    🔐 ACCESO PARA REGISTRAR
+  </button>
 
-    </div>
-
+</div>
 
     <div
       id="formLogin"
@@ -862,8 +873,40 @@
 
 
   // ==========================================
-  // MANTENER LA SESIÓN AL ACTUALIZAR
-  // ==========================================
+// CERRAR SESIÓN
+// ==========================================
+
+async function cerrarSesion() {
+
+  const confirmar = confirm(
+    "¿Está seguro que desea cerrar la sesión?"
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    console.error(error);
+    alert("No se pudo cerrar la sesión.");
+    return;
+  }
+
+  document.getElementById("pantallaLogin").style.display = "flex";
+
+  document.getElementById("paginaPrincipal").style.display = "none";
+
+  document.getElementById("emailAcceso").value = "";
+  document.getElementById("passwordAcceso").value = "";
+
+}
+
+
+// ==========================================
+// MANTENER LA SESIÓN AL ACTUALIZAR
+// ==========================================
 
   async function verificarSesion() {
 
